@@ -9,6 +9,7 @@ pipeline {
         DOCKERHUB_REPO = 'ksenishl/software-engineering-project-2'
         DOCKER_IMAGE_TAG = 'latest'
         DOCKERHUB_CREDENTIALS_ID = 'dockerhub-credentials'
+        GITHUB_CREDENTIALS_ID = 'sep-2-jacoco-token'
     }
 
     stages {
@@ -43,6 +44,30 @@ pipeline {
         stage('publish test results') {
             steps {
                 junit 'target/surefire-reports/*.xml'
+            }
+        }
+
+        stage('publish jacoco report to github pages') {
+            steps {
+                withCredentials([
+                    string(
+                        credentialsId: GITHUB_CREDENTIALS_ID,
+                        variable: 'GITHUB_TOKEN'
+                    )
+                ]) {
+                    dir('jacoco-report') {
+                        deleteDir()
+                        sh '''
+                            cp -R ../target/site/jacoco/. .
+                            git init
+                            git checkout -b gh-pages
+                            git add .
+                            git commit -m "docs: publish jacoco report"
+                            git remote add origin "https://x-access-token:$GITHUB_TOKEN@github.com/x-bananer/software-engineering-project-2.git"
+                            git push --force origin gh-pages
+                        '''
+                    }
+                }
             }
         }
 
