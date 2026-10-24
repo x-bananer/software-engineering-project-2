@@ -5,6 +5,7 @@ target/
 .idea/
 *.iml
 .vscode/
+.github/workflows/
 
 # macOS
 .DS_Store
