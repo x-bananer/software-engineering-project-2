@@ -19,4 +19,4 @@ COPY src ./src
 
 RUN mvn clean package
 
-CMD ["java", "-jar", "target/sep_2-1.0.0.jar"]
+CMD ["mvn", "javafx:run"]
