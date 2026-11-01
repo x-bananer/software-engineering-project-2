@@ -1,8 +1,8 @@
-# Temperature Converter
+# Software Engineering Project
 
-This is an individual assignment for the Software Development course. The project is a Java application developed with JUnit testing, JaCoCo code coverage, Jenkins, Docker, JavaFX, and MariaDB. It also includes localization.
+This is an individual assignment for the Software Engineering Project course. The project is a JavaFX application with temperature conversion, time calculation, MariaDB record storage, and localization.
 
-The application does not have a specific purpose or concept. It includes temperature conversion and time calculation from speed and distance.
+The repository also contains Maven, JUnit, JaCoCo, Jenkins, Docker, and Docker Compose configuration.
 
 ## Technologies and Tools Used
 
@@ -10,11 +10,15 @@ The application does not have a specific purpose or concept. It includes tempera
 | --- | --- |
 | Language | Java 17 |
 | Build tool | Maven |
+| GUI | JavaFX |
 | Unit testing | JUnit Jupiter 5.11.4 |
 | Code coverage | JaCoCo 0.8.15 |
-| Localization | Java `ResourceBundle` and UTF-8 `.properties` files |
+| Localization | Java `ResourceBundle` and UTF-8 `.properties` files for English, Finnish, Swedish, Japanese, and Arabic |
+| Database | MariaDB |
+| Database access | MariaDB JDBC Driver |
 | CI/CD | Jenkins |
 | Containerization | Docker |
+| Local multi-container setup | Docker Compose |
 
 ## Design Approach & Implementation Method
 
@@ -29,9 +33,9 @@ The project uses an MVC structure.
 | DAO | Saves and loads data from the database. |
 | Database | Saves temperature and time records. |
 
-The JavaFX application has two sections. Both save their records in the database. The database tables are in [database.sql](TODO).
+The JavaFX application has two sections. Both save their records in the database. The database tables are defined in [database.sql](database.sql).
 
-- **Temperature Records**: choose a conversion type, enter a temperature, convert it, and save the result. The result is rounded to two decimal places.
+- **Temperature Records**: choose a conversion type, enter a temperature, convert it, and save the result.
 - **Time Records**: enter speed and distance, calculate time, and save the result.
 
 ## Testing & Quality Assurance Steps
@@ -63,26 +67,13 @@ Install:
 - JDK 17
 - Maven
 - MariaDB for local use
-- Docker Desktop for Docker setup
+- Docker Desktop for the Docker configuration
 
 ### Run locally
 
-1. Clone the repository.
+1. Create a MariaDB database named `sep_2` and run [database.sql](database.sql).
 
-   ```bash
-   git clone TODO
-   cd TODO
-   ```
-
-2. Create a MariaDB database named inclass and run [database.sql](TODO).
-
-3. Use these database settings if needed.
-
-   ```text
-   TODO
-   ```
-
-4. Run tests and start the application.
+2. Run tests and start the application.
 
    ```bash
    mvn test
@@ -93,19 +84,21 @@ Install:
 
 1. Start Docker Desktop.
 
-2. Run:
+2. On macOS, start XQuartz. On Windows, start Xming. This is required to display the JavaFX GUI from the container.
+
+3. From the project root, run:
 
    ```bash
    docker compose up --build
    ```
 
-3. Stop the containers when done.
+   Docker Compose starts the MariaDB database and the application. The database schema is initialized from [database.sql](database.sql).
+
+4. Stop the containers when finished:
 
    ```bash
    docker compose down
    ```
-
-On macOS, start XQuartz before running the Docker GUI. On Windows, start Xming.
 
 ## Author
 
