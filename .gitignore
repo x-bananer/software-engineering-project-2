@@ -1,7 +1,7 @@
 # Maven build output
 target/
 
-# IntelliJ IDEA
+# IDE
 .idea/
 *.iml
 .vscode/
