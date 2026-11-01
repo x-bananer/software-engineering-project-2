@@ -1,4 +1,4 @@
-# Software Engineering Project
+# Software Engineering Project 2
 
 This is an individual assignment for the Software Engineering Project course. The project is a JavaFX application with temperature conversion, time calculation, MariaDB record storage, and localization.
 
