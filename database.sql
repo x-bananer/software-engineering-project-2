@@ -1,12 +1,12 @@
 CREATE TABLE IF NOT EXISTS temperature_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    type_name VARCHAR(50) NOT NULL UNIQUE
+    type_key VARCHAR(50) NOT NULL UNIQUE
 );
 
-INSERT IGNORE INTO temperature_types (type_name) VALUES
-    ('Fahrenheit to Celsius'),
-    ('Celsius to Fahrenheit'),
-    ('Kelvin to Celsius');
+INSERT IGNORE INTO temperature_types (type_key) VALUES
+    ('fahrenheitToCelsius'),
+    ('celsiusToFahrenheit'),
+    ('kelvinToCelsius');
 
 CREATE TABLE IF NOT EXISTS temperature_records (
     id INT AUTO_INCREMENT PRIMARY KEY,
