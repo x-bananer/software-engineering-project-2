@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 public class LanguageSection extends HBox {
-	public LanguageSection(ResourceBundle messages, Locale currentLocale, Consumer<Locale> onLanguageSelected) {
+	public LanguageSection(ResourceBundle rs, Locale currentLocale, Consumer<Locale> onLanguageSelected) {
 		setSpacing(8);
 
 		ComboBox<String> languageSelect = new ComboBox<>();
@@ -47,6 +47,6 @@ public class LanguageSection extends HBox {
 			onLanguageSelected.accept(locale);
 		});
 
-		getChildren().addAll(new Label(messages.getString("language")), languageSelect);
+		getChildren().addAll(new Label(rs.getString("language")), languageSelect);
 	}
 }
