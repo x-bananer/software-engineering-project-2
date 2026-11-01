@@ -4,6 +4,7 @@ services:
     environment:
       MARIADB_DATABASE: sep_2
       MARIADB_ROOT_PASSWORD: 1234
+      MARIADB_ROOT_HOST: "%"
     volumes:
       - ./database.sql:/docker-entrypoint-initdb.d/database.sql
       - mariadb_data:/var/lib/mysql
@@ -28,12 +29,10 @@ services:
         condition: service_healthy
     environment:
       DISPLAY: host.docker.internal:0.0
+      JAVA_TOOL_OPTIONS: -Ddb.url=jdbc:mariadb://db:3306/sep_2 -Ddb.user=root -Ddb.password=1234
     command:
       [
         "mvn",
-        "-Ddb.url=jdbc:mariadb://db:3306/sep_2",
-        "-Ddb.user=root",
-        "-Ddb.password=1234",
         "javafx:run"
       ]
 
