@@ -29,7 +29,11 @@ services:
         condition: service_healthy
     environment:
       DISPLAY: host.docker.internal:0.0
-      JAVA_TOOL_OPTIONS: -Ddb.url=jdbc:mariadb://db:3306/sep_2 -Ddb.user=root -Ddb.password=1234
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: sep_2
+      DB_USER: root
+      DB_PASSWORD: 1234
     command:
       [
         "mvn",
