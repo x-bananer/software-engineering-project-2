@@ -2,10 +2,8 @@ services:
   db:
     image: mariadb:11
     environment:
-      MARIADB_DATABASE: inclass
-      MARIADB_USER: inclass
-      MARIADB_PASSWORD: inclass
-      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: sep_2
+      MARIADB_ROOT_PASSWORD: 1234
     volumes:
       - ./database.sql:/docker-entrypoint-initdb.d/database.sql
       - mariadb_data:/var/lib/mysql
@@ -33,9 +31,9 @@ services:
     command:
       [
         "java",
-        "-Ddb.url=jdbc:mariadb://db:3306/inclass",
-        "-Ddb.user=inclass",
-        "-Ddb.password=inclass",
+        "-Ddb.url=jdbc:mariadb://db:3306/sep_2",
+        "-Ddb.user=root",
+        "-Ddb.password=1234",
         "--module-path",
         "/javafx-sdk/lib",
         "--add-modules",
