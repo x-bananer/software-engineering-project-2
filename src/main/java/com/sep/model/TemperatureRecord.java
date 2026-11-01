@@ -12,7 +12,7 @@ public class TemperatureRecord {
 	}
 
 	public String getType() {
-		return temperatureType.getName();
+		return temperatureType.getKey();
 	}
 
 	public TemperatureType getTemperatureType() {
@@ -36,14 +36,14 @@ public class TemperatureRecord {
 	}
 
 	private String fromUnit() {
-		return switch (getType()) {
-			case "Fahrenheit to Celsius" -> "°F";
-			case "Celsius to Fahrenheit" -> "°C";
+		return switch (temperatureType.getKey()) {
+			case "fahrenheitToCelsius" -> "°F";
+			case "celsiusToFahrenheit" -> "°C";
 			default -> "K";
 		};
 	}
 
 	private String toUnit() {
-		return getType().equals("Celsius to Fahrenheit") ? "°F" : "°C";
+		return temperatureType.getKey().equals("celsiusToFahrenheit") ? "°F" : "°C";
 	}
 }

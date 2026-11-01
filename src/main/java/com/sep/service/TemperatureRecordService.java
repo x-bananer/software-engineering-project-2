@@ -15,10 +15,10 @@ public class TemperatureRecordService {
 	private final TemperatureTypeDAO typeDAO = new TemperatureTypeDAO();
 
 	public TemperatureRecord add(TemperatureType type, double value) throws SQLException {
-		double result = switch (type.getName()) {
-			case "Fahrenheit to Celsius" -> converter.fahrenheitToCelsius(value);
-			case "Celsius to Fahrenheit" -> converter.celsiusToFahrenheit(value);
-			case "Kelvin to Celsius" -> converter.kelvinToCelsius(value);
+		double result = switch (type.getKey()) {
+			case "fahrenheitToCelsius" -> converter.fahrenheitToCelsius(value);
+			case "celsiusToFahrenheit" -> converter.celsiusToFahrenheit(value);
+			case "kelvinToCelsius" -> converter.kelvinToCelsius(value);
 			default -> throw new IllegalArgumentException("Unknown temperature type");
 		};
 

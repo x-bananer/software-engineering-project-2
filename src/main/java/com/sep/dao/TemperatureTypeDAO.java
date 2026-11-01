@@ -14,13 +14,13 @@ public class TemperatureTypeDAO {
 
     public List<TemperatureType> getAll() throws SQLException {
         List<TemperatureType> types = new ArrayList<>();
-        String sql = "SELECT id, type_name FROM temperature_types ORDER BY id";
+        String sql = "SELECT id, type_key FROM temperature_types ORDER BY id";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet result = statement.executeQuery()) {
             while (result.next()) {
-                types.add(new TemperatureType(result.getInt("id"), result.getString("type_name")));
+                types.add(new TemperatureType(result.getInt("id"), result.getString("type_key")));
             }
         }
         return types;

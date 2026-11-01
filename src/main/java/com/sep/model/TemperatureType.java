@@ -2,23 +2,23 @@ package com.sep.model;
 
 public class TemperatureType {
     private final int id;
-    private final String name;
+    private final String key;
 
-    public TemperatureType(int id, String name) {
+    public TemperatureType(int id, String key) {
         this.id = id;
-        this.name = name;
+        this.key = key;
     }
 
     public int getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getKey() {
+        return key;
     }
 
     @Override
     public String toString() {
-        return name;
+        return key;
     }
 }
