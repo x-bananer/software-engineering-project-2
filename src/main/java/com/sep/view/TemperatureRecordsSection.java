@@ -3,6 +3,7 @@ package com.sep.view;
 import com.sep.controller.TemperatureRecordController;
 import com.sep.model.TemperatureRecord;
 import com.sep.model.TemperatureType;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -13,30 +14,35 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 public class TemperatureRecordsSection extends VBox {
 
-	public TemperatureRecordsSection() {
+	public TemperatureRecordsSection(ResourceBundle rs) {
 		setSpacing(8);
 
-		Label title = new Label("Temperature Records");
+		Label title = new Label(rs.getString("temperatureRecords"));
 
-		ComboBox<TemperatureType> conversionSelect = new ComboBox<>();
+		ComboBox<String> conversionSelect = new ComboBox<>();
+		List<TemperatureType> temperatureTypes = new ArrayList<>();
 
 		TextField temperatureField = new TextField();
-		temperatureField.setPromptText("Enter temperature");
+		temperatureField.setPromptText(rs.getString("enterTemperature"));
 
-		Button convertButton = new Button("Convert");
+		Button convertButton = new Button(rs.getString("convert"));
+		Label messageLabel = new Label();
 
 		TableView<TemperatureRecord> table = new TableView<>();
 
-		TableColumn<TemperatureRecord, String> typeColumn = new TableColumn<>("Type");
-		typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+		TableColumn<TemperatureRecord, String> typeColumn = new TableColumn<>(rs.getString("type"));
+		typeColumn.setCellValueFactory(cell -> new SimpleStringProperty(rs.getString(cell.getValue().getTemperatureType().getKey())));
 
-		TableColumn<TemperatureRecord, String> fromColumn = new TableColumn<>("From");
+		TableColumn<TemperatureRecord, String> fromColumn = new TableColumn<>(rs.getString("from"));
 		fromColumn.setCellValueFactory(new PropertyValueFactory<>("from"));
 
-		TableColumn<TemperatureRecord, String> toColumn = new TableColumn<>("To");
+		TableColumn<TemperatureRecord, String> toColumn = new TableColumn<>(rs.getString("to"));
 		toColumn.setCellValueFactory(new PropertyValueFactory<>("to"));
 
 		typeColumn.setPrefWidth(160);
@@ -47,37 +53,42 @@ public class TemperatureRecordsSection extends VBox {
 		table.getColumns().addAll(typeColumn, fromColumn, toColumn);
 
 		TemperatureRecordController controller = new TemperatureRecordController();
-		loadTypes(conversionSelect, controller);
-		convertButton.setOnAction(event -> convert(conversionSelect, temperatureField, table, controller));
-		load(table, controller);
+		loadTypes(conversionSelect, temperatureTypes, controller, messageLabel, rs);
+		convertButton.setOnAction(event -> convert(conversionSelect, temperatureTypes, temperatureField, table, controller, messageLabel, rs));
+		load(table, controller, messageLabel, rs);
 
-		getChildren().addAll(title, conversionSelect, temperatureField, convertButton, table);
+		getChildren().addAll(title, conversionSelect, temperatureField, convertButton, messageLabel, table);
 	}
 
-	private void convert(ComboBox<TemperatureType> conversionSelect, TextField temperatureField, TableView<TemperatureRecord> table, TemperatureRecordController controller) {
+	private void convert(ComboBox<String> conversionSelect, List<TemperatureType> temperatureTypes, TextField temperatureField, TableView<TemperatureRecord> table, TemperatureRecordController controller, Label messageLabel, ResourceBundle rs) {
 		try {
-			controller.add(conversionSelect.getValue(), temperatureField.getText());
+			int selectedIndex = conversionSelect.getSelectionModel().getSelectedIndex();
+			controller.add(temperatureTypes.get(selectedIndex), temperatureField.getText());
 			table.getItems().setAll(controller.getAll());
 			temperatureField.clear();
+			messageLabel.setText("");
 		} catch (NumberFormatException | SQLException e) {
-			System.out.println("Could not save temperature");
+			messageLabel.setText(rs.getString("temperatureError"));
 		}
 	}
 
-	private void loadTypes(ComboBox<TemperatureType> conversionSelect, TemperatureRecordController controller) {
+	private void loadTypes(ComboBox<String> conversionSelect, List<TemperatureType> temperatureTypes, TemperatureRecordController controller, Label messageLabel, ResourceBundle rs) {
 		try {
-			conversionSelect.getItems().setAll(controller.getTypes());
-			conversionSelect.setValue(conversionSelect.getItems().get(0));
+			temperatureTypes.addAll(controller.getTypes());
+			for (TemperatureType type : temperatureTypes) {
+				conversionSelect.getItems().add(rs.getString(type.getKey()));
+			}
+			conversionSelect.getSelectionModel().selectFirst();
 		} catch (SQLException e) {
-			System.out.println("Could not load temperature types");
+			messageLabel.setText(rs.getString("databaseError"));
 		}
 	}
 
-	private void load(TableView<TemperatureRecord> table, TemperatureRecordController controller) {
+	private void load(TableView<TemperatureRecord> table, TemperatureRecordController controller, Label messageLabel, ResourceBundle rs) {
 		try {
 			table.getItems().setAll(controller.getAll());
 		} catch (SQLException e) {
-			System.out.println("Could not load temperature records");
+			messageLabel.setText(rs.getString("databaseError"));
 		}
 	}
 

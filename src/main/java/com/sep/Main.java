@@ -2,25 +2,46 @@ package com.sep;
 
 import com.sep.view.TemperatureRecordsSection;
 import com.sep.view.TimeRecordsSection;
+import com.sep.view.LanguageSection;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 public class Main extends Application {
+	@Override
+	public void start(Stage stage) {
+		changeLocale(stage, Locale.US);
+		stage.show();
+	}
 
-    @Override
-    public void start(Stage stage) {
-        VBox layout = new VBox(16, new TemperatureRecordsSection(), new TimeRecordsSection());
-        layout.setPadding(new Insets(20));
+	private void changeLocale(Stage stage, Locale locale) {
+		ResourceBundle rs = ResourceBundle.getBundle("i18n.MessagesBundle", locale);
 
-        stage.setScene(new Scene(layout, 500, 600));
-        stage.show();
-    }
+		VBox layout = new VBox(
+			16, 
+			new LanguageSection(rs, locale, selectedLocale -> changeLocale(stage, selectedLocale)), 
+			new TemperatureRecordsSection(rs), 
+			new TimeRecordsSection(rs)
+		);
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+		layout.setPadding(new Insets(20));
+
+		layout.setNodeOrientation(locale.getLanguage().equals("ar")
+			? NodeOrientation.RIGHT_TO_LEFT
+			: NodeOrientation.LEFT_TO_RIGHT);
+
+		stage.setScene(new Scene(layout, 500, 600));
+		stage.setTitle(rs.getString("title"));
+	}
+
+	public static void main(String[] args) {
+		launch(args);
+	}
 }
