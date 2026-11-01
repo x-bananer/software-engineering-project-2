@@ -1,14 +1,8 @@
 # Temperature Converter
 
-Console application for converting temperatures. It was created for an in-class software engineering assignment focused on Java, testing, code coverage, localization, Docker, and CI/CD.
+This is an individual assignment for the Software Development course. The project is a Java application developed with JUnit testing, JaCoCo code coverage, Jenkins, Docker, JavaFX, and MariaDB. It also includes localization.
 
-## Features
-
-- Converts Fahrenheit to Celsius.
-- Converts Celsius to Fahrenheit.
-- Marks a Celsius temperature as extreme when it is below `-40 °C` or above `50 °C`.
-- Lets the user choose English, Finnish, Swedish, or Japanese at startup.
-- Runs in a loop until the user selects `0`.
+The application does not have a specific purpose or concept. It includes temperature conversion and time calculation from speed and distance.
 
 ## Technologies and Tools Used
 
@@ -22,73 +16,100 @@ Console application for converting temperatures. It was created for an in-class 
 | CI/CD | Jenkins |
 | Containerization | Docker |
 
-## Testing and Code Coverage
+## Design Approach & Implementation Method
 
-`TemperatureConverterTest` tests multiple input values for both conversion methods and boundary cases for extreme temperatures: `-40`, `50`, `-41`, and `51`.
+The project uses an MVC structure.
 
-Run tests:
+| Part | Implementation |
+| --- | --- |
+| Model | Stores temperature, time, and conversion data. |
+| View | Shows input fields, buttons, and tables. |
+| Controller | Gets input from the view and calls the services. |
+| Service | Converts temperatures and calculates time. |
+| DAO | Saves and loads data from the database. |
+| Database | Saves temperature and time records. |
+
+The JavaFX application has two sections. Both save their records in the database. The database tables are in [database.sql](TODO).
+
+- **Temperature Records**: choose a conversion type, enter a temperature, convert it, and save the result. The result is rounded to two decimal places.
+- **Time Records**: enter speed and distance, calculate time, and save the result.
+
+## Testing & Quality Assurance Steps
+
+The project uses automated JUnit tests.
+
+| Test area | Test cases |
+| --- | --- |
+| Temperature conversion | Fahrenheit to Celsius, Celsius to Fahrenheit, and Kelvin to Celsius |
+| Extreme temperatures | Values below -40 °C and above 50 °C |
+| Models | Temperature, time, and conversion data |
+| Services and controllers | Adding and reading temperature and time records |
+| DAO classes | Saving and loading test records |
+
+Run the tests:
 
 ```bash
 mvn test
 ```
 
-Generate the JaCoCo report:
+The project also has a [JaCoCo code coverage report](TODO). Jenkins builds the project, runs tests, creates the report, and builds the Docker image.
 
-```bash
-mvn verify
-```
-
-Open the local report at `target/site/jacoco/index.html`.
-
-The Jenkins pipeline builds the project, runs the tests, publishes the JaCoCo report and JUnit results in Jenkins, then builds and pushes the Docker image to Docker Hub.
-
-## How to Run Locally
+## How to Run
 
 ### Prerequisites
+
+Install:
 
 - JDK 17
 - Maven
+- MariaDB for local use
+- Docker Desktop for Docker setup
 
-### Run the application
+### Run locally
 
-```bash
-git clone https://github.com/x-bananer/software-engineering-project-2.git
-cd software-engineering-project-2
-mvn clean package
-java -jar target/sep-1.0.0.jar
-```
+1. Clone the repository.
 
-At startup, select a language:
+   ```bash
+   git clone TODO
+   cd TODO
+   ```
 
-```text
-0 - English, 1 - Suomi, 2 - Svenska, 3 - 日本語
-```
+2. Create a MariaDB database named inclass and run [database.sql](TODO).
 
-Then select a conversion type and enter a temperature. Enter `0` in the conversion menu to exit.
+3. Use these database settings if needed.
 
-## Run with Docker
+   ```text
+   TODO
+   ```
 
-### Prerequisites
+4. Run tests and start the application.
 
-- Docker Desktop
+   ```bash
+   mvn test
+   mvn javafx:run
+   ```
 
-Build the image:
+### Run with Docker
 
-```bash
-docker build -t temperature-converter .
-```
+1. Start Docker Desktop.
 
-Run the application interactively:
+2. Run:
 
-```bash
-docker run -it --rm temperature-converter
-```
+   ```bash
+   docker compose up --build
+   ```
 
-The published Docker image is available as `ksenishl/software-engineering-project-2:latest`.
+3. Stop the containers when done.
+
+   ```bash
+   docker compose down
+   ```
+
+On macOS, start XQuartz before running the Docker GUI. On Windows, start Xming.
 
 ## Author
 
 Kseniia Shlenskaia  
-Tieto- ja viestintätekniikka  
+Tieto-ja viestintätekniikka  
 TVT25K-O  
-Ohjelmistotuotantoprojekti 2
+Ohjelmistotuotantoprojekti 1 TX00EY27-3012
