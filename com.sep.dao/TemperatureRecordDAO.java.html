@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TemperatureRecordDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">sep_2</a> &gt; <a href="index.source.html" class="el_package">com.sep.dao</a> &gt; <span class="el_source">TemperatureRecordDAO.java</span></div><h1>TemperatureRecordDAO.java</h1><pre class="source lang-java linenums">package com.sep.dao;
+
+import com.sep.db.DatabaseConnection;
+import com.sep.model.TemperatureRecord;
+import com.sep.model.TemperatureType;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+<span class="nc" id="L14">public class TemperatureRecordDAO {</span>
+
+	public void add(TemperatureRecord record) throws SQLException {
+<span class="nc" id="L17">		String sql = &quot;INSERT INTO temperature_records (temperature_type_id, from_temperature, to_temperature) VALUES (?, ?, ?)&quot;;</span>
+
+<span class="nc" id="L19">		try (Connection connection = DatabaseConnection.getConnection();</span>
+<span class="nc" id="L20">				PreparedStatement statement = connection.prepareStatement(sql)) {</span>
+<span class="nc" id="L21">			statement.setInt(1, record.getTemperatureType().getId());</span>
+<span class="nc" id="L22">			statement.setDouble(2, record.getFromTemperature());</span>
+<span class="nc" id="L23">			statement.setDouble(3, record.getToTemperature());</span>
+
+<span class="nc" id="L25">			statement.executeUpdate();</span>
+		}
+<span class="nc" id="L27">	}</span>
+
+	public List&lt;TemperatureRecord&gt; getAll() throws SQLException {
+<span class="nc" id="L30">		List&lt;TemperatureRecord&gt; records = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L31">		String sql = &quot;SELECT r.from_temperature, r.to_temperature, t.id, t.type_key &quot;</span>
+				+ &quot;FROM temperature_records r JOIN temperature_types t ON r.temperature_type_id = t.id ORDER BY r.id&quot;;
+
+<span class="nc" id="L34">		try (Connection connection = DatabaseConnection.getConnection();</span>
+<span class="nc" id="L35">				PreparedStatement statement = connection.prepareStatement(sql);</span>
+<span class="nc" id="L36">				ResultSet result = statement.executeQuery()) {</span>
+
+<span class="nc bnc" id="L38" title="All 2 branches missed.">			while (result.next()) {</span>
+<span class="nc" id="L39">				records.add(new TemperatureRecord(</span>
+<span class="nc" id="L40">						new TemperatureType(result.getInt(&quot;id&quot;), result.getString(&quot;type_key&quot;)),</span>
+<span class="nc" id="L41">						result.getDouble(&quot;from_temperature&quot;),</span>
+<span class="nc" id="L42">						result.getDouble(&quot;to_temperature&quot;)));</span>
+			}
+		}
+
+<span class="nc" id="L46">		return records;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

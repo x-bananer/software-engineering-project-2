@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TemperatureRecordsSection.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">sep_2</a> &gt; <a href="index.source.html" class="el_package">com.sep.view</a> &gt; <span class="el_source">TemperatureRecordsSection.java</span></div><h1>TemperatureRecordsSection.java</h1><pre class="source lang-java linenums">package com.sep.view;
+
+import com.sep.controller.TemperatureRecordController;
+import com.sep.model.TemperatureRecord;
+import com.sep.model.TemperatureType;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+public class TemperatureRecordsSection extends VBox {
+
+<span class="nc" id="L23">	public TemperatureRecordsSection(ResourceBundle rs) {</span>
+<span class="nc" id="L24">		setSpacing(8);</span>
+
+<span class="nc" id="L26">		Label title = new Label(rs.getString(&quot;temperatureRecords&quot;));</span>
+
+<span class="nc" id="L28">		ComboBox&lt;String&gt; conversionSelect = new ComboBox&lt;&gt;();</span>
+<span class="nc" id="L29">		List&lt;TemperatureType&gt; temperatureTypes = new ArrayList&lt;&gt;();</span>
+
+<span class="nc" id="L31">		TextField temperatureField = new TextField();</span>
+<span class="nc" id="L32">		temperatureField.setPromptText(rs.getString(&quot;enterTemperature&quot;));</span>
+
+<span class="nc" id="L34">		Button convertButton = new Button(rs.getString(&quot;convert&quot;));</span>
+<span class="nc" id="L35">		Label messageLabel = new Label();</span>
+
+<span class="nc" id="L37">		TableView&lt;TemperatureRecord&gt; table = new TableView&lt;&gt;();</span>
+
+<span class="nc" id="L39">		TableColumn&lt;TemperatureRecord, String&gt; typeColumn = new TableColumn&lt;&gt;(rs.getString(&quot;type&quot;));</span>
+<span class="nc" id="L40">		typeColumn.setCellValueFactory(cell -&gt; new SimpleStringProperty(rs.getString(cell.getValue().getTemperatureType().getKey())));</span>
+
+<span class="nc" id="L42">		TableColumn&lt;TemperatureRecord, String&gt; fromColumn = new TableColumn&lt;&gt;(rs.getString(&quot;from&quot;));</span>
+<span class="nc" id="L43">		fromColumn.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;from&quot;));</span>
+
+<span class="nc" id="L45">		TableColumn&lt;TemperatureRecord, String&gt; toColumn = new TableColumn&lt;&gt;(rs.getString(&quot;to&quot;));</span>
+<span class="nc" id="L46">		toColumn.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;to&quot;));</span>
+
+<span class="nc" id="L48">		typeColumn.setPrefWidth(160);</span>
+<span class="nc" id="L49">		fromColumn.setPrefWidth(150);</span>
+<span class="nc" id="L50">		toColumn.setPrefWidth(150);</span>
+<span class="nc" id="L51">		table.setPrefHeight(150);</span>
+
+<span class="nc" id="L53">		table.getColumns().addAll(typeColumn, fromColumn, toColumn);</span>
+
+<span class="nc" id="L55">		TemperatureRecordController controller = new TemperatureRecordController();</span>
+<span class="nc" id="L56">		loadTypes(conversionSelect, temperatureTypes, controller, messageLabel, rs);</span>
+<span class="nc" id="L57">		convertButton.setOnAction(event -&gt; convert(conversionSelect, temperatureTypes, temperatureField, table, controller, messageLabel, rs));</span>
+<span class="nc" id="L58">		load(table, controller, messageLabel, rs);</span>
+
+<span class="nc" id="L60">		getChildren().addAll(title, conversionSelect, temperatureField, convertButton, messageLabel, table);</span>
+<span class="nc" id="L61">	}</span>
+
+	private void convert(ComboBox&lt;String&gt; conversionSelect, List&lt;TemperatureType&gt; temperatureTypes, TextField temperatureField, TableView&lt;TemperatureRecord&gt; table, TemperatureRecordController controller, Label messageLabel, ResourceBundle rs) {
+		try {
+<span class="nc" id="L65">			int selectedIndex = conversionSelect.getSelectionModel().getSelectedIndex();</span>
+<span class="nc" id="L66">			controller.add(temperatureTypes.get(selectedIndex), temperatureField.getText());</span>
+<span class="nc" id="L67">			table.getItems().setAll(controller.getAll());</span>
+<span class="nc" id="L68">			temperatureField.clear();</span>
+<span class="nc" id="L69">			messageLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L70">		} catch (NumberFormatException | SQLException e) {</span>
+<span class="nc" id="L71">			messageLabel.setText(rs.getString(&quot;temperatureError&quot;));</span>
+<span class="nc" id="L72">		}</span>
+<span class="nc" id="L73">	}</span>
+
+	private void loadTypes(ComboBox&lt;String&gt; conversionSelect, List&lt;TemperatureType&gt; temperatureTypes, TemperatureRecordController controller, Label messageLabel, ResourceBundle rs) {
+		try {
+<span class="nc" id="L77">			temperatureTypes.addAll(controller.getTypes());</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">			for (TemperatureType type : temperatureTypes) {</span>
+<span class="nc" id="L79">				conversionSelect.getItems().add(rs.getString(type.getKey()));</span>
+<span class="nc" id="L80">			}</span>
+<span class="nc" id="L81">			conversionSelect.getSelectionModel().selectFirst();</span>
+<span class="nc" id="L82">		} catch (SQLException e) {</span>
+<span class="nc" id="L83">			messageLabel.setText(rs.getString(&quot;databaseError&quot;));</span>
+<span class="nc" id="L84">		}</span>
+<span class="nc" id="L85">	}</span>
+
+	private void load(TableView&lt;TemperatureRecord&gt; table, TemperatureRecordController controller, Label messageLabel, ResourceBundle rs) {
+		try {
+<span class="nc" id="L89">			table.getItems().setAll(controller.getAll());</span>
+<span class="nc" id="L90">		} catch (SQLException e) {</span>
+<span class="nc" id="L91">			messageLabel.setText(rs.getString(&quot;databaseError&quot;));</span>
+<span class="nc" id="L92">		}</span>
+<span class="nc" id="L93">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

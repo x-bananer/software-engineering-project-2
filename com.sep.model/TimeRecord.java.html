@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TimeRecord.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">sep_2</a> &gt; <a href="index.source.html" class="el_package">com.sep.model</a> &gt; <span class="el_source">TimeRecord.java</span></div><h1>TimeRecord.java</h1><pre class="source lang-java linenums">package com.sep.model;
+
+public class TimeRecord {
+	private final double speed;
+	private final double distance;
+	private final double time;
+
+<span class="fc" id="L8">	public TimeRecord(double speed, double distance, double time) {</span>
+<span class="fc" id="L9">		this.speed = speed;</span>
+<span class="fc" id="L10">		this.distance = distance;</span>
+<span class="fc" id="L11">		this.time = time;</span>
+<span class="fc" id="L12">	}</span>
+
+	public String getSpeed() {
+<span class="fc" id="L15">		return speed + &quot; km/h&quot;;</span>
+	}
+
+	public String getDistance() {
+<span class="fc" id="L19">		return distance + &quot; km&quot;;</span>
+	}
+
+	public String getTime() {
+<span class="fc" id="L23">		return time + &quot; h&quot;;</span>
+	}
+
+	public double getSpeedValue() {
+<span class="fc" id="L27">		return speed;</span>
+	}
+
+	public double getDistanceValue() {
+<span class="fc" id="L31">		return distance;</span>
+	}
+
+	public double getTimeValue() {
+<span class="fc" id="L35">		return time;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

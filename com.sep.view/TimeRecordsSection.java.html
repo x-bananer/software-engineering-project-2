@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TimeRecordsSection.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">sep_2</a> &gt; <a href="index.source.html" class="el_package">com.sep.view</a> &gt; <span class="el_source">TimeRecordsSection.java</span></div><h1>TimeRecordsSection.java</h1><pre class="source lang-java linenums">package com.sep.view;
+
+import com.sep.controller.TimeRecordController;
+import com.sep.model.TimeRecord;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
+import java.sql.SQLException;
+import java.util.ResourceBundle;
+
+public class TimeRecordsSection extends VBox {
+
+<span class="nc" id="L19">	public TimeRecordsSection(ResourceBundle rs) {</span>
+<span class="nc" id="L20">		setSpacing(8);</span>
+
+<span class="nc" id="L22">		Label title = new Label(rs.getString(&quot;timeRecords&quot;));</span>
+
+<span class="nc" id="L24">		TextField speedField = new TextField();</span>
+<span class="nc" id="L25">		speedField.setPromptText(rs.getString(&quot;speed&quot;));</span>
+
+<span class="nc" id="L27">		TextField distanceField = new TextField();</span>
+<span class="nc" id="L28">		distanceField.setPromptText(rs.getString(&quot;distance&quot;));</span>
+
+<span class="nc" id="L30">		Button saveButton = new Button(rs.getString(&quot;save&quot;));</span>
+<span class="nc" id="L31">		Label messageLabel = new Label();</span>
+
+<span class="nc" id="L33">		TableView&lt;TimeRecord&gt; table = new TableView&lt;&gt;();</span>
+
+<span class="nc" id="L35">		TableColumn&lt;TimeRecord, String&gt; speedColumn = new TableColumn&lt;&gt;(rs.getString(&quot;speed&quot;));</span>
+<span class="nc" id="L36">		speedColumn.setCellValueFactory(cell -&gt; new SimpleStringProperty( cell.getValue().getSpeedValue() + &quot; &quot; + rs.getString(&quot;kilometersPerHour&quot;)));</span>
+
+<span class="nc" id="L38">		TableColumn&lt;TimeRecord, String&gt; distanceColumn = new TableColumn&lt;&gt;(rs.getString(&quot;distance&quot;));</span>
+<span class="nc" id="L39">		distanceColumn.setCellValueFactory(cell -&gt; new SimpleStringProperty( cell.getValue().getDistanceValue() + &quot; &quot; + rs.getString(&quot;kilometers&quot;)));</span>
+
+<span class="nc" id="L41">		TableColumn&lt;TimeRecord, String&gt; timeColumn = new TableColumn&lt;&gt;(rs.getString(&quot;time&quot;));</span>
+<span class="nc" id="L42">		timeColumn.setCellValueFactory(cell -&gt; new SimpleStringProperty(cell.getValue().getTimeValue() + &quot; &quot; + rs.getString(&quot;hours&quot;)));</span>
+
+<span class="nc" id="L44">		speedColumn.setPrefWidth(150);</span>
+<span class="nc" id="L45">		distanceColumn.setPrefWidth(150);</span>
+<span class="nc" id="L46">		timeColumn.setPrefWidth(150);</span>
+<span class="nc" id="L47">		table.setPrefHeight(150);</span>
+
+<span class="nc" id="L49">		table.getColumns().addAll(speedColumn, distanceColumn, timeColumn);</span>
+
+<span class="nc" id="L51">		TimeRecordController controller = new TimeRecordController();</span>
+<span class="nc" id="L52">		saveButton.setOnAction(event -&gt; save(speedField, distanceField, table, controller, messageLabel, rs));</span>
+<span class="nc" id="L53">		load(table, controller, messageLabel, rs);</span>
+
+<span class="nc" id="L55">		getChildren().addAll(title, new HBox(8, speedField, distanceField), saveButton, messageLabel, table);</span>
+<span class="nc" id="L56">	}</span>
+
+	private void save(TextField speedField, TextField distanceField, TableView&lt;TimeRecord&gt; table, TimeRecordController controller, Label messageLabel, ResourceBundle rs) {
+		try {
+<span class="nc" id="L60">			controller.add(speedField.getText(), distanceField.getText());</span>
+<span class="nc" id="L61">			table.getItems().setAll(controller.getAll());</span>
+<span class="nc" id="L62">			speedField.clear();</span>
+<span class="nc" id="L63">			distanceField.clear();</span>
+<span class="nc" id="L64">			messageLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L65">		} catch (NumberFormatException | SQLException e) {</span>
+<span class="nc" id="L66">			messageLabel.setText(rs.getString(&quot;timeError&quot;));</span>
+<span class="nc" id="L67">		}</span>
+<span class="nc" id="L68">	}</span>
+
+	private void load(TableView&lt;TimeRecord&gt; table, TimeRecordController controller, Label messageLabel, ResourceBundle rs) {
+		try {
+<span class="nc" id="L72">			table.getItems().setAll(controller.getAll());</span>
+<span class="nc" id="L73">		} catch (SQLException e) {</span>
+<span class="nc" id="L74">			messageLabel.setText(rs.getString(&quot;databaseError&quot;));</span>
+<span class="nc" id="L75">		}</span>
+<span class="nc" id="L76">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TemperatureRecord.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">sep_2</a> &gt; <a href="index.source.html" class="el_package">com.sep.model</a> &gt; <span class="el_source">TemperatureRecord.java</span></div><h1>TemperatureRecord.java</h1><pre class="source lang-java linenums">package com.sep.model;
+
+public class TemperatureRecord {
+	private final TemperatureType temperatureType;
+	private final double fromTemperature;
+	private final double toTemperature;
+
+<span class="fc" id="L8">	public TemperatureRecord(TemperatureType temperatureType, double fromTemperature, double toTemperature) {</span>
+<span class="fc" id="L9">		this.temperatureType = temperatureType;</span>
+<span class="fc" id="L10">		this.fromTemperature = fromTemperature;</span>
+<span class="fc" id="L11">		this.toTemperature = toTemperature;</span>
+<span class="fc" id="L12">	}</span>
+
+	public String getType() {
+<span class="fc" id="L15">		return temperatureType.getKey();</span>
+	}
+
+	public TemperatureType getTemperatureType() {
+<span class="nc" id="L19">		return temperatureType;</span>
+	}
+
+	public String getFrom() {
+<span class="fc" id="L23">		return fromTemperature + &quot; &quot; + fromUnit();</span>
+	}
+
+	public String getTo() {
+<span class="fc" id="L27">		return toTemperature + &quot; &quot; + toUnit();</span>
+	}
+
+	public double getFromTemperature() {
+<span class="nc" id="L31">		return fromTemperature;</span>
+	}
+
+	public double getToTemperature() {
+<span class="nc" id="L35">		return toTemperature;</span>
+	}
+
+	private String fromUnit() {
+<span class="fc bfc" id="L39" title="All 3 branches covered.">		return switch (temperatureType.getKey()) {</span>
+<span class="fc" id="L40">			case &quot;fahrenheitToCelsius&quot; -&gt; &quot;°F&quot;;</span>
+<span class="fc" id="L41">			case &quot;celsiusToFahrenheit&quot; -&gt; &quot;°C&quot;;</span>
+<span class="fc" id="L42">			default -&gt; &quot;K&quot;;</span>
+		};
+	}
+
+	private String toUnit() {
+<span class="fc bfc" id="L47" title="All 2 branches covered.">		return temperatureType.getKey().equals(&quot;celsiusToFahrenheit&quot;) ? &quot;°F&quot; : &quot;°C&quot;;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>
