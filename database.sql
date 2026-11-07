@@ -1,14 +1,18 @@
-CREATE TABLE IF NOT EXISTS temperature_types (
+DROP TABLE time_records;
+DROP TABLE temperature_records;
+DROP TABLE temperature_types;
+
+CREATE TABLE temperature_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
     type_key VARCHAR(50) NOT NULL UNIQUE
 );
 
-INSERT IGNORE INTO temperature_types (type_key) VALUES
+INSERT INTO temperature_types (type_key) VALUES
     ('fahrenheitToCelsius'),
     ('celsiusToFahrenheit'),
     ('kelvinToCelsius');
 
-CREATE TABLE IF NOT EXISTS temperature_records (
+CREATE TABLE temperature_records (
     id INT AUTO_INCREMENT PRIMARY KEY,
     temperature_type_id INT NOT NULL,
     from_temperature DECIMAL(10,2) NOT NULL,
@@ -17,7 +21,7 @@ CREATE TABLE IF NOT EXISTS temperature_records (
     FOREIGN KEY (temperature_type_id) REFERENCES temperature_types(id)
 );
 
-CREATE TABLE IF NOT EXISTS time_records (
+CREATE TABLE time_records (
     id INT AUTO_INCREMENT PRIMARY KEY,
     speed DECIMAL(10,2) NOT NULL,
     distance DECIMAL(10,2) NOT NULL,
