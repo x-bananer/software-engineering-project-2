@@ -37,7 +37,7 @@ public class TemperatureRecordsSection extends VBox {
 		TableView<TemperatureRecord> table = new TableView<>();
 
 		TableColumn<TemperatureRecord, String> typeColumn = new TableColumn<>(rs.getString("type"));
-		typeColumn.setCellValueFactory(cell -> new SimpleStringProperty(rs.getString(cell.getValue().getTemperatureType().getKey())));
+		typeColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getTemperatureType().getName()));
 
 		TableColumn<TemperatureRecord, String> fromColumn = new TableColumn<>(rs.getString("from"));
 		fromColumn.setCellValueFactory(new PropertyValueFactory<>("from"));
@@ -76,7 +76,7 @@ public class TemperatureRecordsSection extends VBox {
 		try {
 			temperatureTypes.addAll(controller.getTypes());
 			for (TemperatureType type : temperatureTypes) {
-				conversionSelect.getItems().add(rs.getString(type.getKey()));
+				conversionSelect.getItems().add(type.getName());
 			}
 			conversionSelect.getSelectionModel().selectFirst();
 		} catch (SQLException e) {

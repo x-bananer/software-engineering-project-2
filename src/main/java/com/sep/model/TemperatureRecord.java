@@ -36,14 +36,10 @@ public class TemperatureRecord {
 	}
 
 	private String fromUnit() {
-		return switch (temperatureType.getKey()) {
-			case "fahrenheitToCelsius" -> "°F";
-			case "celsiusToFahrenheit" -> "°C";
-			default -> "K";
-		};
+		return temperatureType.getFromSign();
 	}
 
 	private String toUnit() {
-		return temperatureType.getKey().equals("celsiusToFahrenheit") ? "°F" : "°C";
+		return temperatureType.getToSign();
 	}
 }

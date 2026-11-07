@@ -28,7 +28,7 @@ public class TemperatureRecordDAO {
 
 	public List<TemperatureRecord> getAll() throws SQLException {
 		List<TemperatureRecord> records = new ArrayList<>();
-		String sql = "SELECT r.from_temperature, r.to_temperature, t.id, t.type_key "
+		String sql = "SELECT r.from_temperature, r.to_temperature, t.id, t.type_key, t.name, t.from_sign, t.to_sign "
 				+ "FROM temperature_records r JOIN temperature_types t ON r.temperature_type_id = t.id ORDER BY r.id";
 
 		try (Connection connection = DatabaseConnection.getConnection();
@@ -37,7 +37,12 @@ public class TemperatureRecordDAO {
 
 			while (result.next()) {
 				records.add(new TemperatureRecord(
-						new TemperatureType(result.getInt("id"), result.getString("type_key")),
+						new TemperatureType(
+								result.getInt("id"),
+								result.getString("type_key"),
+								result.getString("name"),
+								result.getString("from_sign"),
+								result.getString("to_sign")),
 						result.getDouble("from_temperature"),
 						result.getDouble("to_temperature")));
 			}

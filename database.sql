@@ -4,13 +4,16 @@ DROP TABLE temperature_types;
 
 CREATE TABLE temperature_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    type_key VARCHAR(50) NOT NULL UNIQUE
+    type_key VARCHAR(50) NOT NULL UNIQUE,
+	name VARCHAR(255),
+	from_sign VARCHAR(50),
+	to_sign VARCHAR(50)
 );
 
-INSERT INTO temperature_types (type_key) VALUES
-    ('fahrenheitToCelsius'),
-    ('celsiusToFahrenheit'),
-    ('kelvinToCelsius');
+INSERT INTO temperature_types (type_key, name, from_sign, to_sign) VALUES
+    ('fahrenheitToCelsius', 'Fahrenheit to Celsius', '°F', '°C'),
+    ('celsiusToFahrenheit', 'Celsius to Fahrenheit', '°C', '°F'),
+    ('kelvinToCelsius', 'Kelvin to Celsius', 'K', '°C');
 
 CREATE TABLE temperature_records (
     id INT AUTO_INCREMENT PRIMARY KEY,

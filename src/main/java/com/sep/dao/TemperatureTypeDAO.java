@@ -12,17 +12,22 @@ import java.util.List;
 
 public class TemperatureTypeDAO {
 
-    public List<TemperatureType> getAll() throws SQLException {
-        List<TemperatureType> types = new ArrayList<>();
-        String sql = "SELECT id, type_key FROM temperature_types ORDER BY id";
+	public List<TemperatureType> getAll() throws SQLException {
+		List<TemperatureType> types = new ArrayList<>();
+		String sql = "SELECT id, type_key, name, from_sign, to_sign FROM temperature_types ORDER BY id";
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet result = statement.executeQuery()) {
-            while (result.next()) {
-                types.add(new TemperatureType(result.getInt("id"), result.getString("type_key")));
-            }
-        }
-        return types;
-    }
+		try (Connection connection = DatabaseConnection.getConnection();
+				PreparedStatement statement = connection.prepareStatement(sql);
+				ResultSet result = statement.executeQuery()) {
+			while (result.next()) {
+				types.add(new TemperatureType(
+						result.getInt("id"),
+						result.getString("type_key"),
+						result.getString("name"),
+						result.getString("from_sign"),
+						result.getString("to_sign")));
+			}
+		}
+		return types;
+	}
 }
