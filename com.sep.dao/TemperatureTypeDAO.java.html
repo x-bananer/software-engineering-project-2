@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TemperatureTypeDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">sep_2</a> &gt; <a href="index.source.html" class="el_package">com.sep.dao</a> &gt; <span class="el_source">TemperatureTypeDAO.java</span></div><h1>TemperatureTypeDAO.java</h1><pre class="source lang-java linenums">package com.sep.dao;
+
+import com.sep.db.DatabaseConnection;
+import com.sep.model.TemperatureType;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+<span class="fc" id="L13">public class TemperatureTypeDAO {</span>
+
+	public List&lt;TemperatureType&gt; getAll(String langCode) throws SQLException {
+<span class="fc" id="L16">		List&lt;TemperatureType&gt; types = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L17">		String lang = getLang(langCode);</span>
+<span class="fc" id="L18">		String sql = &quot;SELECT id, type_key, name_&quot; + lang + &quot;, descr_&quot; + lang + &quot;, from_unit_id, to_unit_id FROM temperature_types ORDER BY id&quot;;</span>
+
+<span class="fc" id="L20">		try (Connection connection = DatabaseConnection.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {</span>
+<span class="fc" id="L21">			try (ResultSet result = statement.executeQuery()) {</span>
+<span class="fc bfc" id="L22" title="All 2 branches covered.">				while (result.next()) {</span>
+<span class="fc" id="L23">					types.add(new TemperatureType(</span>
+<span class="fc" id="L24">						result.getInt(&quot;id&quot;),</span>
+<span class="fc" id="L25">						result.getString(&quot;type_key&quot;),</span>
+<span class="fc" id="L26">						result.getString(&quot;name_&quot; + lang),</span>
+<span class="fc" id="L27">						result.getString(&quot;descr_&quot; + lang),</span>
+<span class="fc" id="L28">						getSign(result.getInt(&quot;from_unit_id&quot;), lang),</span>
+<span class="fc" id="L29">						getSign(result.getInt(&quot;to_unit_id&quot;), lang)));</span>
+				}
+			}
+		}
+<span class="fc" id="L33">		return types;</span>
+	}
+
+	public TemperatureType getById(int id, String langCode) throws SQLException {
+<span class="fc" id="L37">		String lang = getLang(langCode);</span>
+<span class="fc" id="L38">		String sql = &quot;SELECT id, type_key, name_&quot; + lang + &quot;, descr_&quot; + lang + &quot;, from_unit_id, to_unit_id FROM temperature_types WHERE id = ?&quot;;</span>
+
+<span class="fc" id="L40">		try (Connection connection = DatabaseConnection.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {</span>
+<span class="fc" id="L41">			statement.setInt(1, id);</span>
+<span class="fc" id="L42">			try (ResultSet result = statement.executeQuery()) {</span>
+<span class="fc" id="L43">				result.next();</span>
+<span class="fc" id="L44">				return new TemperatureType(</span>
+<span class="fc" id="L45">					result.getInt(&quot;id&quot;),</span>
+<span class="fc" id="L46">					result.getString(&quot;type_key&quot;),</span>
+<span class="fc" id="L47">					result.getString(&quot;name_&quot; + lang),</span>
+<span class="fc" id="L48">					result.getString(&quot;descr_&quot; + lang),</span>
+<span class="fc" id="L49">					getSign(result.getInt(&quot;from_unit_id&quot;), lang),</span>
+<span class="fc" id="L50">					getSign(result.getInt(&quot;to_unit_id&quot;), lang));</span>
+			}
+		}
+	}
+
+	private String getSign(int unitId, String lang) throws SQLException {
+<span class="fc" id="L56">		String sql = &quot;SELECT sign_&quot; + lang + &quot; FROM units WHERE id = ?&quot;;</span>
+
+<span class="fc" id="L58">		try (Connection connection = DatabaseConnection.getConnection();</span>
+<span class="fc" id="L59">				 PreparedStatement statement = connection.prepareStatement(sql)) {</span>
+<span class="fc" id="L60">			statement.setInt(1, unitId);</span>
+<span class="fc" id="L61">			try (ResultSet result = statement.executeQuery()) {</span>
+<span class="fc" id="L62">				result.next();</span>
+<span class="fc" id="L63">				return result.getString(&quot;sign_&quot; + lang);</span>
+			}
+		}
+	}
+
+	static String getLang(String langCode) {
+<span class="fc bfc" id="L69" title="All 2 branches covered.">		return switch (langCode) {</span>
+<span class="fc" id="L70">			case &quot;fi&quot;, &quot;sv&quot;, &quot;ja&quot;, &quot;ar&quot; -&gt; langCode;</span>
+<span class="fc" id="L71">			default -&gt; &quot;en&quot;;</span>
+		};
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

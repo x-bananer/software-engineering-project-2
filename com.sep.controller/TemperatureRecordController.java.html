@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TemperatureRecordController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">sep_2</a> &gt; <a href="index.source.html" class="el_package">com.sep.controller</a> &gt; <span class="el_source">TemperatureRecordController.java</span></div><h1>TemperatureRecordController.java</h1><pre class="source lang-java linenums">package com.sep.controller;
+
+import com.sep.model.TemperatureRecord;
+import com.sep.model.TemperatureType;
+import com.sep.service.TemperatureRecordService;
+
+import java.sql.SQLException;
+import java.util.List;
+
+<span class="fc" id="L10">public class TemperatureRecordController {</span>
+<span class="fc" id="L11">    private final TemperatureRecordService tempRecordService = new TemperatureRecordService();</span>
+
+    public TemperatureRecord add(TemperatureType type, String value, String langCode) throws SQLException {
+<span class="fc" id="L14">        return tempRecordService.add(type, Double.parseDouble(value), langCode);</span>
+    }
+
+    public List&lt;TemperatureRecord&gt; getAll(String langCode) throws SQLException {
+<span class="fc" id="L18">        return tempRecordService.getAll(langCode);</span>
+    }
+
+    public List&lt;TemperatureType&gt; getTypes(String langCode) throws SQLException {
+<span class="fc" id="L22">        return tempRecordService.getTypes(langCode);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>
