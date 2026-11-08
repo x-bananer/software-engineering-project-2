@@ -38,6 +38,12 @@ The JavaFX application has two sections. Both save their records in the database
 - **Temperature Records**: choose a conversion type, enter a temperature, convert it, and save the result.
 - **Time Records**: enter speed and distance, calculate time, and save the result.
 
+## Database Localization: Field Localization
+
+The application supports English, Finnish, Swedish, Japanese, and Arabic. It uses the field localization approach for texts stored in the database. Each row has one column for each language (`name_en`, `name_fi`, `name_sv`, `name_ja`, `name_ar`).
+
+Field localization is a good choice for this application because it has a small, fixed list of languages and a small amount of data. It allows simple database queries without extra translation tables or joins. A new language would need new columns, so this approach is not good for large or frequently changing data, but it fits this application well.
+
 ## Testing & Quality Assurance Steps
 
 The project uses automated JUnit tests.
@@ -71,7 +77,8 @@ Install:
 
 ### Run locally
 
-1. Create a MariaDB database named `sep_2` and run [database.sql](database.sql).
+1. Create a MariaDB database named `sep_2` and run [database.sql](database.sql). The script resets
+   the application tables and inserts the localized lookup data.
 
 2. Run tests and start the application.
 
