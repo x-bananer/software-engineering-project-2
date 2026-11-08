@@ -11,27 +11,15 @@ public class TimeRecord {
 		this.time = time;
 	}
 
-	public String getSpeed() {
-		return speed + " km/h";
-	}
-
-	public String getDistance() {
-		return distance + " km";
-	}
-
-	public String getTime() {
-		return time + " h";
-	}
-
-	public double getSpeedValue() {
+	public double getSpeed() {
 		return speed;
 	}
 
-	public double getDistanceValue() {
+	public double getDistance() {
 		return distance;
 	}
 
-	public double getTimeValue() {
+	public double getTime() {
 		return time;
 	}
 }

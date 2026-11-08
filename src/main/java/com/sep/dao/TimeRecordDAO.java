@@ -15,11 +15,10 @@ public class TimeRecordDAO {
 	public void add(TimeRecord record) throws SQLException {
 		String sql = "INSERT INTO time_records (speed, distance, `time`) VALUES (?, ?, ?)";
 
-		try (Connection connection = DatabaseConnection.getConnection();
-				PreparedStatement statement = connection.prepareStatement(sql)) {
-			statement.setDouble(1, record.getSpeedValue());
-			statement.setDouble(2, record.getDistanceValue());
-			statement.setDouble(3, record.getTimeValue());
+		try (Connection connection = DatabaseConnection.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+			statement.setDouble(1, record.getSpeed());
+			statement.setDouble(2, record.getDistance());
+			statement.setDouble(3, record.getTime());
 
 			statement.executeUpdate();
 		}
@@ -29,15 +28,13 @@ public class TimeRecordDAO {
 		List<TimeRecord> records = new ArrayList<>();
 		String sql = "SELECT speed, distance, `time` FROM time_records ORDER BY id";
 
-		try (Connection connection = DatabaseConnection.getConnection();
-				PreparedStatement statement = connection.prepareStatement(sql);
-				ResultSet result = statement.executeQuery()) {
+		try (Connection connection = DatabaseConnection.getConnection(); PreparedStatement statement = connection.prepareStatement(sql); ResultSet result = statement.executeQuery()) {
 
 			while (result.next()) {
 				records.add(new TimeRecord(
-						result.getDouble("speed"),
-						result.getDouble("distance"),
-						result.getDouble("time")));
+					result.getDouble("speed"),
+					result.getDouble("distance"),
+					result.getDouble("time")));
 			}
 		}
 

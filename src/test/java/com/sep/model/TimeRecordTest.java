@@ -9,11 +9,8 @@ class TimeRecordTest {
 	void storesTimeRecordValues() {
 		TimeRecord record = new TimeRecord(80.0, 40.0, 0.5);
 
-		assertEquals(80.0, record.getSpeedValue());
-		assertEquals(40.0, record.getDistanceValue());
-		assertEquals(0.5, record.getTimeValue());
-		assertEquals("80.0 km/h", record.getSpeed());
-		assertEquals("40.0 km", record.getDistance());
-		assertEquals("0.5 h", record.getTime());
+		assertEquals(80.0, record.getSpeed());
+		assertEquals(40.0, record.getDistance());
+		assertEquals(0.5, record.getTime());
 	}
 }
