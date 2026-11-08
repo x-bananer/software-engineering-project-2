@@ -38,7 +38,7 @@ The JavaFX application has two sections. Both save their records in the database
 - **Temperature Records**: choose a conversion type, enter a temperature, convert it, and save the result.
 - **Time Records**: enter speed and distance, calculate time, and save the result.
 
-## Database Localization: Field Localization
+## Database Localization
 
 The application supports English, Finnish, Swedish, Japanese, and Arabic. For texts in the database, it uses field localization. With this approach each translated text has one column per language (e.g. `name_en`, `name_fi`, `description_en`, `description_fi`). The application choses the column that matches the selected language. As a default language, it uses English.
 
