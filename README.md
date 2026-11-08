@@ -40,7 +40,7 @@ The JavaFX application has two sections. Both save their records in the database
 
 ## Database Localization
 
-The application supports English, Finnish, Swedish, Japanese, and Arabic. For texts in the database, it uses field localization. With this approach each translated text has one column per language (e.g. `name_en`, `name_fi`, `description_en`, `description_fi`). The application choses the column that matches the selected language. As a default language, it uses English.
+The application supports English, Finnish, Swedish, Japanese, and Arabic. For texts in the database, it uses field localization. With this approach each translated text has one column per language (e.g. `name_en`, `name_fi`, `description_en`, `description_fi`). The application chooses the column that matches the selected language. As a default language, it uses English.
 
 **Schema** (see [database.sql](database.sql)):
 
@@ -57,7 +57,7 @@ The application supports English, Finnish, Swedish, Japanese, and Arabic. For te
 - The application has very little translated data.
 - The application does not need to use complex SQL queries with joins to get a translation.
 
-The current approach may have disadvantage in case of further development of the project. Currently, each new language needs new columns. This would be a problem of the list of used languages grows, but it is appropriate for this project at the current stage of development.
+The current approach may have disadvantage in case of further development of the project. Currently, each new language needs new columns. This would be a problem if the list of used languages grows, but it is appropriate for this project at the current stage of development.
 
 ## Testing & Quality Assurance Steps
 
@@ -77,7 +77,7 @@ Run the tests:
 mvn test
 ```
 
-The project also has a [JaCoCo code coverage report](TODO). Jenkins builds the project, runs tests, creates the report, and builds the Docker image.
+The project also has a [JaCoCo code coverage report](https://x-bananer.github.io/software-engineering-project-2/). To create it locally, run `mvn verify` and open `target/site/jacoco/index.html`. Jenkins builds the project, runs tests, creates the report, and builds the Docker image.
 
 ## How to Run
 
@@ -92,10 +92,27 @@ Install:
 
 ### Run locally
 
-1. Create a MariaDB database named `sep_2` and run [database.sql](database.sql). The script resets
+1. Start MariaDB, then create a database named `sep_2` and run [database.sql](database.sql). The script resets
    the application tables and inserts the localized lookup data.
 
-2. Run tests and start the application.
+   ```bash
+   mariadb -uroot -p -e "CREATE DATABASE IF NOT EXISTS sep_2 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+   mariadb -uroot -p sep_2 < database.sql
+   ```
+
+2. Check the database connection settings. By default, the application connects to MariaDB on `localhost:3306`, database `sep_2`, as user `root` with password `1234`. If your setup is different, set these environment variables before running the tests or the application:
+
+   | Variable | Default |
+   | --- | --- |
+   | `DB_HOST` | `localhost` |
+   | `DB_PORT` | `3306` |
+   | `DB_NAME` | `sep_2` |
+   | `DB_USER` | `root` |
+   | `DB_PASSWORD` | `1234` |
+
+   For example: `export DB_PASSWORD=my-password`.
+
+3. Run tests and start the application. MariaDB must be running, and the computer needs a desktop environment to show the JavaFX window.
 
    ```bash
    mvn test
