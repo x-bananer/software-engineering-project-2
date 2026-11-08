@@ -9,6 +9,8 @@ RUN apt-get update && apt-get install -y \
     libxi6 \
     libxrender1 \
     libxtst6 \
+    fonts-noto-cjk \
+    fonts-noto-core \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
