@@ -8,17 +8,17 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class TemperatureRecordController {
-    private final TemperatureRecordService service = new TemperatureRecordService();
+    private final TemperatureRecordService tempRecordService = new TemperatureRecordService();
 
-    public TemperatureRecord add(TemperatureType type, String value) throws SQLException {
-        return service.add(type, Double.parseDouble(value));
+    public TemperatureRecord add(TemperatureType type, String value, String langCode) throws SQLException {
+        return tempRecordService.add(type, Double.parseDouble(value), langCode);
     }
 
-    public List<TemperatureRecord> getAll() throws SQLException {
-        return service.getAll();
+    public List<TemperatureRecord> getAll(String langCode) throws SQLException {
+        return tempRecordService.getAll(langCode);
     }
 
-    public List<TemperatureType> getTypes() throws SQLException {
-        return service.getTypes();
+    public List<TemperatureType> getTypes(String langCode) throws SQLException {
+        return tempRecordService.getTypes(langCode);
     }
 }

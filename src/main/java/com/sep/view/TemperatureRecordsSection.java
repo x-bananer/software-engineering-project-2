@@ -16,80 +16,96 @@ import javafx.scene.layout.VBox;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class TemperatureRecordsSection extends VBox {
-
-	public TemperatureRecordsSection(ResourceBundle rs) {
+	public TemperatureRecordsSection(ResourceBundle rs, Locale locale) {
 		setSpacing(8);
 
+		String langCode = locale.getLanguage();
+		TemperatureRecordController controller = new TemperatureRecordController();
 		Label title = new Label(rs.getString("temperatureRecords"));
-
 		ComboBox<String> conversionSelect = new ComboBox<>();
-		List<TemperatureType> temperatureTypes = new ArrayList<>();
-
+		Label descriptionLabel = new Label();
 		TextField temperatureField = new TextField();
 		temperatureField.setPromptText(rs.getString("enterTemperature"));
-
 		Button convertButton = new Button(rs.getString("convert"));
 		Label messageLabel = new Label();
-
+		messageLabel.setVisible(false);
+		messageLabel.setManaged(false);
 		TableView<TemperatureRecord> table = new TableView<>();
+		List<TemperatureType> tempTypes = new ArrayList<>();
 
 		TableColumn<TemperatureRecord, String> typeColumn = new TableColumn<>(rs.getString("type"));
-		typeColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getTemperatureType().getName()));
-
+		typeColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getTempType().getName()));
 		TableColumn<TemperatureRecord, String> fromColumn = new TableColumn<>(rs.getString("from"));
 		fromColumn.setCellValueFactory(new PropertyValueFactory<>("from"));
-
 		TableColumn<TemperatureRecord, String> toColumn = new TableColumn<>(rs.getString("to"));
 		toColumn.setCellValueFactory(new PropertyValueFactory<>("to"));
-
-		typeColumn.setPrefWidth(160);
-		fromColumn.setPrefWidth(150);
-		toColumn.setPrefWidth(150);
+		table.getColumns().addAll(typeColumn, fromColumn, toColumn);
 		table.setPrefHeight(150);
 
-		table.getColumns().addAll(typeColumn, fromColumn, toColumn);
-
-		TemperatureRecordController controller = new TemperatureRecordController();
-		loadTypes(conversionSelect, temperatureTypes, controller, messageLabel, rs);
-		convertButton.setOnAction(event -> convert(conversionSelect, temperatureTypes, temperatureField, table, controller, messageLabel, rs));
-		load(table, controller, messageLabel, rs);
-
-		getChildren().addAll(title, conversionSelect, temperatureField, convertButton, messageLabel, table);
+		loadTypes(conversionSelect, descriptionLabel, tempTypes, controller, langCode, messageLabel, rs);
+		conversionSelect.setOnAction(event -> showDescription(conversionSelect, descriptionLabel, tempTypes));
+		convertButton.setOnAction(event -> convert(conversionSelect, tempTypes, temperatureField, table, controller, langCode, messageLabel, rs));
+		load(table, controller, langCode, messageLabel, rs);
+		getChildren().addAll(title, conversionSelect, descriptionLabel, temperatureField, convertButton, messageLabel, table);
 	}
 
-	private void convert(ComboBox<String> conversionSelect, List<TemperatureType> temperatureTypes, TextField temperatureField, TableView<TemperatureRecord> table, TemperatureRecordController controller, Label messageLabel, ResourceBundle rs) {
+	private void loadTypes(ComboBox<String> select, Label description, List<TemperatureType> types,
+			TemperatureRecordController controller, String langCode, Label message, ResourceBundle rs) {
 		try {
-			int selectedIndex = conversionSelect.getSelectionModel().getSelectedIndex();
-			controller.add(temperatureTypes.get(selectedIndex), temperatureField.getText());
-			table.getItems().setAll(controller.getAll());
-			temperatureField.clear();
-			messageLabel.setText("");
-		} catch (NumberFormatException | SQLException e) {
-			messageLabel.setText(rs.getString("temperatureError"));
-		}
-	}
-
-	private void loadTypes(ComboBox<String> conversionSelect, List<TemperatureType> temperatureTypes, TemperatureRecordController controller, Label messageLabel, ResourceBundle rs) {
-		try {
-			temperatureTypes.addAll(controller.getTypes());
-			for (TemperatureType type : temperatureTypes) {
-				conversionSelect.getItems().add(type.getName());
+			types.addAll(controller.getTypes(langCode));
+			for (TemperatureType type : types) {
+				select.getItems().add(type.getName());
 			}
-			conversionSelect.getSelectionModel().selectFirst();
+			select.getSelectionModel().selectFirst();
+			showDescription(select, description, types);
 		} catch (SQLException e) {
-			messageLabel.setText(rs.getString("databaseError"));
+			showMessage(message, rs.getString("databaseError"));
 		}
 	}
 
-	private void load(TableView<TemperatureRecord> table, TemperatureRecordController controller, Label messageLabel, ResourceBundle rs) {
+	private void showDescription(ComboBox<String> select, Label description, List<TemperatureType> types) {
+		int index = select.getSelectionModel().getSelectedIndex();
+		if (index >= 0) {
+			description.setText(types.get(index).getDescription());
+		}
+	}
+
+	private void convert(ComboBox<String> select, List<TemperatureType> types, TextField input,
+			TableView<TemperatureRecord> table, TemperatureRecordController controller, String langCode,
+			Label message, ResourceBundle rs) {
 		try {
-			table.getItems().setAll(controller.getAll());
-		} catch (SQLException e) {
-			messageLabel.setText(rs.getString("databaseError"));
+			int index = select.getSelectionModel().getSelectedIndex();
+			controller.add(types.get(index), input.getText(), langCode);
+			table.getItems().setAll(controller.getAll(langCode));
+			input.clear();
+			clearMessage(message);
+		} catch (NumberFormatException | IndexOutOfBoundsException | SQLException e) {
+			showMessage(message, rs.getString("temperatureError"));
 		}
 	}
 
+	private void load(TableView<TemperatureRecord> table, TemperatureRecordController controller,
+			String langCode, Label message, ResourceBundle rs) {
+		try {
+			table.getItems().setAll(controller.getAll(langCode));
+		} catch (SQLException e) {
+			showMessage(message, rs.getString("databaseError"));
+		}
+	}
+
+	private void showMessage(Label message, String text) {
+		message.setText(text);
+		message.setVisible(true);
+		message.setManaged(true);
+	}
+
+	private void clearMessage(Label message) {
+		message.setText("");
+		message.setVisible(false);
+		message.setManaged(false);
+	}
 }

@@ -27,17 +27,21 @@ public class Main extends Application {
 		VBox layout = new VBox(
 			16, 
 			new LanguageSection(rs, locale, selectedLocale -> changeLocale(stage, selectedLocale)), 
-			new TemperatureRecordsSection(rs), 
-			new TimeRecordsSection(rs)
+			new TemperatureRecordsSection(rs, locale),
+			new TimeRecordsSection(rs, locale)
 		);
 
 		layout.setPadding(new Insets(20));
+
+		// if (locale.getLanguage().equals("ja")) {
+		// 	layout.setStyle("-fx-font-family: 'Noto Sans CJK JP';");
+		// }
 
 		layout.setNodeOrientation(locale.getLanguage().equals("ar")
 			? NodeOrientation.RIGHT_TO_LEFT
 			: NodeOrientation.LEFT_TO_RIGHT);
 
-		stage.setScene(new Scene(layout, 500, 600));
+		stage.setScene(new Scene(layout, 650, 600));
 		stage.setTitle(rs.getString("title"));
 	}
 

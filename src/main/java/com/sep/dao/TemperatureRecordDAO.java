@@ -2,7 +2,6 @@ package com.sep.dao;
 
 import com.sep.db.DatabaseConnection;
 import com.sep.model.TemperatureRecord;
-import com.sep.model.TemperatureType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,41 +12,36 @@ import java.util.List;
 
 public class TemperatureRecordDAO {
 
-	public void add(TemperatureRecord record) throws SQLException {
-		String sql = "INSERT INTO temperature_records (temperature_type_id, from_temperature, to_temperature) VALUES (?, ?, ?)";
+	public void add(TemperatureRecord record, String langCode) throws SQLException {
+		String sql = "INSERT INTO temperature_records (temperature_type_id, from_temperature, to_temperature, lang_code) VALUES (?, ?, ?, ?)";
 
-		try (Connection connection = DatabaseConnection.getConnection();
-				PreparedStatement statement = connection.prepareStatement(sql)) {
-			statement.setInt(1, record.getTemperatureType().getId());
-			statement.setDouble(2, record.getFromTemperature());
-			statement.setDouble(3, record.getToTemperature());
+		try (Connection connection = DatabaseConnection.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+			statement.setInt(1, record.getTempType().getId());
+			statement.setDouble(2, record.getFromTemp());
+			statement.setDouble(3, record.getToTemp());
+			statement.setString(4, langCode);
 
 			statement.executeUpdate();
 		}
 	}
 
-	public List<TemperatureRecord> getAll() throws SQLException {
+	public List<TemperatureRecord> getAll(String langCode) throws SQLException {
 		List<TemperatureRecord> records = new ArrayList<>();
-		String sql = "SELECT r.from_temperature, r.to_temperature, t.id, t.type_key, t.name, t.from_sign, t.to_sign "
-				+ "FROM temperature_records r JOIN temperature_types t ON r.temperature_type_id = t.id ORDER BY r.id";
+		TemperatureTypeDAO typeDAO = new TemperatureTypeDAO();
+		
+		String sql = "SELECT temperature_type_id, from_temperature, to_temperature FROM temperature_records ORDER BY id DESC LIMIT 5";
 
-		try (Connection connection = DatabaseConnection.getConnection();
-				PreparedStatement statement = connection.prepareStatement(sql);
-				ResultSet result = statement.executeQuery()) {
+		try (Connection connection = DatabaseConnection.getConnection(); PreparedStatement statement = connection.prepareStatement(sql); ResultSet result = statement.executeQuery()) {
 
 			while (result.next()) {
 				records.add(new TemperatureRecord(
-						new TemperatureType(
-								result.getInt("id"),
-								result.getString("type_key"),
-								result.getString("name"),
-								result.getString("from_sign"),
-								result.getString("to_sign")),
-						result.getDouble("from_temperature"),
-						result.getDouble("to_temperature")));
+					typeDAO.getById(result.getInt("temperature_type_id"), langCode),
+					result.getDouble("from_temperature"),
+					result.getDouble("to_temperature")));
 			}
 		}
 
 		return records;
 	}
+
 }

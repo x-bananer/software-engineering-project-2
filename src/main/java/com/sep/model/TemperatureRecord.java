@@ -1,45 +1,41 @@
 package com.sep.model;
 
 public class TemperatureRecord {
-	private final TemperatureType temperatureType;
-	private final double fromTemperature;
-	private final double toTemperature;
+	private final TemperatureType tempType;
+	private final double fromTemp;
+	private final double toTemp;
 
-	public TemperatureRecord(TemperatureType temperatureType, double fromTemperature, double toTemperature) {
-		this.temperatureType = temperatureType;
-		this.fromTemperature = fromTemperature;
-		this.toTemperature = toTemperature;
+	public TemperatureRecord(TemperatureType tempType, double fromTemp, double toTemp) {
+		this.tempType = tempType;
+		this.fromTemp = fromTemp;
+		this.toTemp = toTemp;
 	}
 
-	public String getType() {
-		return temperatureType.getKey();
-	}
-
-	public TemperatureType getTemperatureType() {
-		return temperatureType;
+	public TemperatureType getTempType() {
+		return tempType;
 	}
 
 	public String getFrom() {
-		return fromTemperature + " " + fromUnit();
+		return fromTemp + " " + fromUnit();
 	}
 
 	public String getTo() {
-		return toTemperature + " " + toUnit();
+		return toTemp + " " + toUnit();
 	}
 
-	public double getFromTemperature() {
-		return fromTemperature;
+	public double getFromTemp() {
+		return fromTemp;
 	}
 
-	public double getToTemperature() {
-		return toTemperature;
+	public double getToTemp() {
+		return toTemp;
 	}
 
 	private String fromUnit() {
-		return temperatureType.getFromSign();
+		return tempType.getFromSign();
 	}
 
 	private String toUnit() {
-		return temperatureType.getToSign();
+		return tempType.getToSign();
 	}
 }
