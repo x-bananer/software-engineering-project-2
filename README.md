@@ -40,9 +40,24 @@ The JavaFX application has two sections. Both save their records in the database
 
 ## Database Localization: Field Localization
 
-The application supports English, Finnish, Swedish, Japanese, and Arabic. It uses the field localization approach for texts stored in the database. Each row has one column for each language (`name_en`, `name_fi`, `name_sv`, `name_ja`, `name_ar`).
+The application supports English, Finnish, Swedish, Japanese, and Arabic. For texts in the database, it uses field localization. With this approach each translated text has one column per language (e.g. `name_en`, `name_fi`, `description_en`, `description_fi`). The application choses the column that matches the selected language. As a default language, it uses English.
 
-Field localization is a good choice for this application because it has a small, fixed list of languages and a small amount of data. It allows simple database queries without extra translation tables or joins. A new language would need new columns, so this approach is not good for large or frequently changing data, but it fits this application well.
+**Schema** (see [database.sql](database.sql)):
+
+| Table | Columns |
+| --- | --- |
+| `units` | `id`, `unit`, `sign_[language code]`, `name_[language code]` |
+| `temperature_types` | `id`, `type_key`, `from_unit_id`, `to_unit_id`, `name_[language code]`, `descr_[language code]` |
+| `time_record_types` | `id`, `field_key`, `unit_id`, `name_[language code]`, `descr_[language code]` |
+| `temperature_records` | `id`, `temperature_type_id`, `from_temperature`, `to_temperature`, `lang_code`, `created_at` |
+| `time_records` | `id`, `speed`, `distance`, `time`, `created_at` |
+
+**Advantages of Field Localization**
+- The application has only five languages and the list is not going to expand.
+- The application has very little translated data.
+- The application does not need to use complex SQL queries with joins to get a translation.
+
+The current approach may have disadvantage in case of further development of the project. Currently, each new language needs new columns. This would be a problem of the list of used languages grows, but it is appropriate for this project at the current stage of development.
 
 ## Testing & Quality Assurance Steps
 
