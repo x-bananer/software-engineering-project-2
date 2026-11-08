@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     libxtst6 \
     fonts-noto-cjk \
     fonts-noto-core \
+    xvfb \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -19,6 +20,6 @@ COPY pom.xml .
 
 COPY src ./src
 
-RUN mvn clean package
+RUN mvn clean package -DexcludedGroups=db
 
-CMD ["mvn", "javafx:run"]
+CMD ["xvfb-run", "mvn", "javafx:run"]
