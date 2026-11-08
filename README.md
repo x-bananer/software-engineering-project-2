@@ -46,11 +46,11 @@ The application supports English, Finnish, Swedish, Japanese, and Arabic. For te
 
 | Table | Columns |
 | --- | --- |
-| `units` | `id`, `unit`, `sign_[language code]`, `name_[language code]` |
-| `temperature_types` | `id`, `type_key`, `from_unit_id`, `to_unit_id`, `name_[language code]`, `descr_[language code]` |
-| `time_record_types` | `id`, `field_key`, `unit_id`, `name_[language code]`, `descr_[language code]` |
-| `temperature_records` | `id`, `temperature_type_id`, `from_temperature`, `to_temperature`, `lang_code`, `created_at` |
-| `time_records` | `id`, `speed`, `distance`, `time`, `created_at` |
+| units | id, unit, sign_[language code], name_[language code] |
+| temperature_types | id, type_key, from_unit_id, to_unit_id, name_[language code], descr_[language code] |
+| time_record_types | id, field_key, unit_id, name_[language code], descr_[language code] |
+| temperature_records | id, temperature_type_id, from_temperature, to_temperature, lang_code, created_at |
+| time_records | id, speed, distance, time, created_at |
 
 **Advantages of Field Localization**
 - The application has only five languages and the list is not going to expand.
